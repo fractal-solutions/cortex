@@ -13,8 +13,9 @@ public:
     std::vector<double> Forward(const std::vector<double>& inputs);
     void Backward(const std::vector<double>& inputs, const std::vector<double>& targets, double learningRate);
     void UpdateWeights(); // This method will be used in case of optimization or weight update.
-
-private:
+    
+    
+    //priiiivaaaaatee
     std::vector<int> layerSizes;
     std::vector<std::vector<std::vector<double>>> weights;
     std::vector<std::vector<double>> biases;
@@ -23,6 +24,10 @@ private:
     std::function<double(double)> activation;
     std::function<double(double)> activationDerivative;
     double learningRate = 0.001; // Default learning rate
+
+
+private:
+    
 };
 
 #endif // NEURALNETWORK_H

@@ -1,6 +1,8 @@
 #include "DQN.h"
 #include <algorithm>
 #include <random>
+#include <fstream>
+#include <iostream>
 
 // Constructor
 DQN::DQN(int stateSize, int actionSize, const std::vector<int>& hiddenLayers,
@@ -58,4 +60,47 @@ void DQN::UpdateTargetNetwork() {
 // Get Q-values for a given state
 std::vector<double> DQN::GetQValues(const std::vector<double>& state) {
     return qNetwork.Forward(state);
+}
+
+
+void DQN::SaveModel(const std::string& filepath) {
+    std::ofstream file(filepath, std::ios::binary);
+    if (!file) {
+        std::cerr << "Error: Unable to open file for saving model." << std::endl;
+        return;
+    }
+
+    file.write(reinterpret_cast<const char*>(stateSize), sizeof(stateSize));
+    file.write(reinterpret_cast<const char*>(actionSize), sizeof(actionSize));
+    // Serialize weights and biases
+    for (const auto& layer : qNetwork.weights) {
+        for (const auto& neuron : layer) {
+            file.write(reinterpret_cast<const char*>(neuron.data()), neuron.size() * sizeof(double));
+        }
+    }
+    for (const auto& layer : qNetwork.biases) {
+        file.write(reinterpret_cast<const char*>(layer.data()), layer.size() * sizeof(double));
+    }
+    file.close();
+}
+
+void DQN::LoadModel(const std::string& filepath) {
+    std::ifstream file(filepath, std::ios::binary);
+    if (!file) {
+        std::cerr << "Error: Unable to open file for loading model." << std::endl;
+        return;
+    }
+
+    file.read(reinterpret_cast<char*>(stateSize), sizeof(stateSize));
+    file.read(reinterpret_cast<char*>(actionSize), sizeof(actionSize));
+    // Deserialize weights and biases
+    for (auto& layer : qNetwork.weights) {
+        for (auto& neuron : layer) {
+            file.read(reinterpret_cast<char*>(neuron.data()), neuron.size() * sizeof(double));
+        }
+    }
+    for (auto& layer : qNetwork.biases) {
+        file.read(reinterpret_cast<char*>(layer.data()), layer.size() * sizeof(double));
+    }
+    file.close();
 }

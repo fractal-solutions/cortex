@@ -23,6 +23,10 @@ public:
     double GetGamma() const { return gamma; }
     double GetEpsilonDecay() const { return epsilonDecay; }
 
+    // Save and load model methods
+    void SaveModel(const std::string& filepath);
+    void LoadModel(const std::string& filepath);
+
 private:
     int stateSize;
     int actionSize;

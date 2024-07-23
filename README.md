@@ -17,6 +17,8 @@ void DestroyDQN(int dqn);
 double GetGamma(int dqn);
 double GetEpsilon(int dqn);
 double GetEpsilonDecay(int dqn);
+void SaveModel(int dqn, string filepath);
+void LoadModel(int dqn, string filepath);
 #import
 
 // Example usage
@@ -28,6 +30,12 @@ void OnStart() {
 
     // Create DQN instance
     int dqn = CreateDQN(stateSize, actionSize, hiddenLayers, hiddenLayersSize);
+
+    // Load model if exists
+    string modelPath = "path/to/model.bin";
+    if (FileIsExist(modelPath)) {
+        LoadModel(dqn, modelPath);
+    }
 
     // Example state
     double state[] = {0.1, 0.2, 0.3, 0.4};
@@ -43,6 +51,9 @@ void OnStart() {
 
     // Update target network
     UpdateTargetNetwork(dqn);
+
+    // Save model
+    SaveModel(dqn, modelPath);
 
     // Destroy DQN instance
     DestroyDQN(dqn);
