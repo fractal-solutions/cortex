@@ -88,6 +88,11 @@ int OnInit() {
     int loadResult = LoadModel(dqn, modelPath);
     PrintError(loadResult);
 
+    // Set DQN parameters
+    gamma = GetGamma(dqn);
+    epsilon = GetEpsilon(dqn);
+    epsilonDecay = GetEpsilonDecay(dqn);
+
     return INIT_SUCCEEDED;
 }
 
@@ -106,10 +111,8 @@ void OnTick() {
     // Example state (replace with actual market data)
     double state[] = {iClose(Symbol(), PERIOD_M1, 1), iHigh(Symbol(), PERIOD_M1, 1), iLow(Symbol(), PERIOD_M1, 1), iVolume(Symbol(), PERIOD_M1, 1)};
     
-    // Set DQN parameters
-    gamma = GetGamma(dqn);
+    // Update DQN parameters
     epsilon = GetEpsilon(dqn);
-    epsilonDecay = GetEpsilonDecay(dqn);
 
     // Select an action
     int action = SelectAction(dqn, state, ArraySize(state), epsilon);
