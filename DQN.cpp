@@ -63,11 +63,11 @@ std::vector<double> DQN::GetQValues(const std::vector<double>& state) {
 }
 
 
-void DQN::SaveModel(const std::string& filepath) {
+int DQN::SaveModel(const std::string& filepath) {
     std::ofstream file(filepath, std::ios::binary);
     if (!file) {
         std::cerr << "Error: Unable to open file for saving model." << std::endl;
-        return;
+        return 1;
     }
 
     file.write(reinterpret_cast<const char*>(stateSize), sizeof(stateSize));
@@ -82,13 +82,14 @@ void DQN::SaveModel(const std::string& filepath) {
         file.write(reinterpret_cast<const char*>(layer.data()), layer.size() * sizeof(double));
     }
     file.close();
+    return 0;
 }
 
-void DQN::LoadModel(const std::string& filepath) {
+int DQN::LoadModel(const std::string& filepath) {
     std::ifstream file(filepath, std::ios::binary);
     if (!file) {
         std::cerr << "Error: Unable to open file for loading model." << std::endl;
-        return;
+        return 1;
     }
 
     file.read(reinterpret_cast<char*>(stateSize), sizeof(stateSize));
@@ -103,4 +104,5 @@ void DQN::LoadModel(const std::string& filepath) {
         file.read(reinterpret_cast<char*>(layer.data()), layer.size() * sizeof(double));
     }
     file.close();
+    return 0;
 }

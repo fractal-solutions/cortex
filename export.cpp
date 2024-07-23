@@ -40,11 +40,11 @@ double __stdcall GetEpsilonDecay(DQN* dqn) {
     return dqn->GetEpsilonDecay();
 }
 
-void __stdcall SaveModel(DQN* dqn, const char* filepath) {
+int __stdcall SaveModel(DQN* dqn, const char* filepath) {
     dqn->SaveModel(filepath);
 }
 
-void __stdcall LoadModel(DQN* dqn, const char* filepath) {
+int __stdcall LoadModel(DQN* dqn, const char* filepath) {
     dqn->LoadModel(filepath);
 }
 

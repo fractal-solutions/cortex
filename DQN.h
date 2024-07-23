@@ -24,8 +24,8 @@ public:
     double GetEpsilonDecay() const { return epsilonDecay; }
 
     // Save and load model methods
-    void SaveModel(const std::string& filepath);
-    void LoadModel(const std::string& filepath);
+    int SaveModel(const std::string& filepath);
+    int LoadModel(const std::string& filepath);
 
 private:
     int stateSize;

@@ -14,8 +14,8 @@ __declspec(dllexport) void __stdcall UpdateTargetNetwork(DQN* dqn);
 __declspec(dllexport) double __stdcall GetGamma(DQN* dqn);
 __declspec(dllexport) double __stdcall GetEpsilon(DQN* dqn);
 __declspec(dllexport) double __stdcall GetEpsilonDecay(DQN* dqn);
-__declspec(dllexport) void __stdcall SaveModel(DQN* dqn, const char* filepath);
-__declspec(dllexport) void __stdcall LoadModel(DQN* dqn, const char* filepath);
+__declspec(dllexport) int __stdcall SaveModel(DQN* dqn, const char* filepath);
+__declspec(dllexport) int __stdcall LoadModel(DQN* dqn, const char* filepath);
 
 }
 
