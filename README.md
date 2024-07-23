@@ -4,10 +4,26 @@
 
 ## Using the DLL in MQL5
 In your MQL5 code, you'll need to import the functions from your DLL and call them. Here's how you can set it up:
+
+#### Architecture Overview
+1. Initialization (OnInit):
+    > Create the DQN instance.
+    > Optionally load a pre-trained model.
+
+2. Tick Handling (OnTick):
+    > Use the DQN to make decisions based on incoming market signals.
+    > Optionally train the DQN based on actions taken and received rewards.
+
+3. Deinitialization (OnDeinit):
+    > Save the current model state.
+    > Clean up resources.
+
+
 ### Example MQL5 Code:
 
 ```
 
+// DLL IMPORT
 #import "dqn.dll"
 int CreateDQN(int stateSize, int actionSize, int &hiddenLayers[], int hiddenLayersSize);
 int SelectAction(int dqn, double &state[], int stateSize, double epsilon);
@@ -21,50 +37,102 @@ int SaveModel(int dqn, string filepath);
 int LoadModel(int dqn, string filepath);
 #import
 
-// Example usage
-void OnStart() {
-    int stateSize = 4;
-    int actionSize = 2;
-    int hiddenLayers[] = {24, 24};
+// Global variables
+int dqn;
+double gamma;
+double epsilon;
+double epsilonDecay;
+string modelPath = "DQN_Model.dat";
+
+// Helper function to print error messages
+void PrintError(int errorCode) {
+    switch (errorCode) {
+        case 0:
+            Print("Operation successful.");
+            break;
+        case 1:
+            Print("Error: Invalid parameters.");
+            break;
+        case 2:
+            Print("Error: Failed to open file.");
+            break;
+        default:
+            Print("Unknown error code: ", errorCode);
+            break;
+    }
+}
+
+// Initialization function
+int OnInit() {
+    int stateSize = 4;  // Example state size
+    int actionSize = 2; // Example action size
+    int hiddenLayers[] = {24, 24}; // Example hidden layers
     int hiddenLayersSize = ArraySize(hiddenLayers);
 
     // Create DQN instance
-    int dqn = CreateDQN(stateSize, actionSize, hiddenLayers, hiddenLayersSize);
+    dqn = CreateDQN(stateSize, actionSize, hiddenLayers, hiddenLayersSize);
 
-    // Load model if exists
-    int loadError = LoadModel(dqn, modelPath);
-    if (loadError == 0) {
-        Comment("Model Loaded")
-    } else {
-        Comment("Error: No File To Load")
-    }
+    // Load model if available
+    int loadResult = LoadModel(dqn, modelPath);
+    PrintError(loadResult);
 
-    // Example state
-    double state[] = {0.1, 0.2, 0.3, 0.4};
-    double epsilon = 1.0;
+    // Get DQN parameters
+    gamma = GetGamma(dqn);
+    epsilon = GetEpsilon(dqn);
+    epsilonDecay = GetEpsilonDecay(dqn);
+
+    return INIT_SUCCEEDED;
+}
+
+// Deinitialization function
+void OnDeinit(const int reason) {
+    // Save the model before exiting
+    int saveResult = SaveModel(dqn, modelPath);
+    PrintError(saveResult);
+
+    // Destroy the DQN instance
+    DestroyDQN(dqn);
+}
+
+// Function to handle new ticks
+void OnTick() {
+    // Example state (replace with actual market data)
+    double state[] = {iClose(Symbol(), PERIOD_M1, 1), iHigh(Symbol(), PERIOD_M1, 1), iLow(Symbol(), PERIOD_M1, 1), iVolume(Symbol(), PERIOD_M1, 1)};
 
     // Select an action
-    int action = SelectAction(dqn, state, ArraySize(state), GetEpsilon(dqn));
-    
-    // Example training
-    double reward = 1.0;
-    double nextState[] = {0.2, 0.3, 0.4, 0.5};
-    Train(dqn, state, ArraySize(state), action, reward, nextState, ArraySize(nextState), GetGamma(dqn), GetEpsilonDecay(dqn));
+    int action = SelectAction(dqn, state, ArraySize(state), epsilon);
 
-    // Update target network
-    UpdateTargetNetwork(dqn);
-
-    // Save model
-    int saveError = SaveModel(dqn, modelPath);
-    if (saveError == 0) {
-        Comment("Model Saved")
+    // Execute the action (replace with actual trading logic)
+    if (action == 0) {
+        // Buy signal
+        if (OrderSelect(0, SELECT_BY_POS)) {
+            if (OrderType() == OP_SELL) OrderClose(OrderTicket(), OrderLots(), Ask, 2);
+        }
+        OrderSend(Symbol(), OP_BUY, 0.1, Ask, 2, 0, 0);
     } else {
-        Comment("Error: No File To Save")
+        // Sell signal
+        if (OrderSelect(0, SELECT_BY_POS)) {
+            if (OrderType() == OP_BUY) OrderClose(OrderTicket(), OrderLots(), Bid, 2);
+        }
+        OrderSend(Symbol(), OP_SELL, 0.1, Bid, 2, 0, 0);
     }
 
-    // Destroy DQN instance
-    DestroyDQN(dqn);
+    // Example reward (replace with actual reward calculation)
+    double reward = OrderProfit();
+
+    // Example next state (replace with actual market data)
+    double nextState[] = {iClose(Symbol(), PERIOD_M1, 0), iHigh(Symbol(), PERIOD_M1, 0), iLow(Symbol(), PERIOD_M1, 0), iVolume(Symbol(), PERIOD_M1, 0)};
+
+    // Train the model
+    Train(dqn, state, ArraySize(state), action, reward, nextState, ArraySize(nextState), gamma, epsilonDecay);
+
+    // Update the target network periodically
+    if (TimeCurrent() % 60 == 0) {
+        UpdateTargetNetwork(dqn);
+    }
 }
 
 
 ```
+
+### 
