@@ -1,42 +1,42 @@
-#include "export.h"
 #include "DQN.h"
+#include <vector>
 
 extern "C" {
 
-__declspec(dllexport) void* CreateDQN(int stateSize, int actionSize, int hiddenLayers[], int hiddenLayersSize) {
-    std::vector<int> layers(hiddenLayers, hiddenLayers + hiddenLayersSize);
-    return new DQN(stateSize, actionSize, layers);
+DQN* __stdcall CreateDQN(int stateSize, int actionSize, int* hiddenLayers, int hiddenLayersSize) {
+    std::vector<int> hiddenLayersVec(hiddenLayers, hiddenLayers + hiddenLayersSize);
+    return new DQN(stateSize, actionSize, hiddenLayersVec);
 }
 
-__declspec(dllexport) int SelectAction(void* dqn, double state[], int stateSize, double epsilon) {
+void __stdcall DestroyDQN(DQN* dqn) {
+    delete dqn;
+}
+
+int __stdcall SelectAction(DQN* dqn, double* state, int stateSize, double epsilon) {
     std::vector<double> stateVec(state, state + stateSize);
-    return static_cast<DQN*>(dqn)->SelectAction(stateVec, epsilon);
+    return dqn->SelectAction(stateVec, epsilon);
 }
 
-__declspec(dllexport) void Train(void* dqn, double state[], int stateSize, int action, double reward, double nextState[], int nextStateSize, double gamma, double epsilonDecay) {
+void __stdcall Train(DQN* dqn, double* state, int stateSize, int action, double reward, double* nextState, int nextStateSize, double gamma, double epsilonDecay) {
     std::vector<double> stateVec(state, state + stateSize);
     std::vector<double> nextStateVec(nextState, nextState + nextStateSize);
-    static_cast<DQN*>(dqn)->Train(stateVec, action, reward, nextStateVec, gamma, epsilonDecay);
+    dqn->Train(stateVec, action, reward, nextStateVec, gamma, epsilonDecay);
 }
 
-__declspec(dllexport) void UpdateTargetNetwork(void* dqn) {
-    static_cast<DQN*>(dqn)->UpdateTargetNetwork();
+void __stdcall UpdateTargetNetwork(DQN* dqn) {
+    dqn->UpdateTargetNetwork();
 }
 
-__declspec(dllexport) double GetEpsilon(void* dqn) {
-    return static_cast<DQN*>(dqn)->GetEpsilon();
+double __stdcall GetGamma(DQN* dqn) {
+    return dqn->GetGamma();
 }
 
-__declspec(dllexport) double GetEpsilonDecay(void* dqn) {
-    return static_cast<DQN*>(dqn)->GetEpsilonDecay();
+double __stdcall GetEpsilon(DQN* dqn) {
+    return dqn->GetEpsilon();
 }
 
-__declspec(dllexport) double GetGamma(void* dqn) {
-    return static_cast<DQN*>(dqn)->GetGamma();
-}
-
-__declspec(dllexport) void DestroyDQN(void* dqn) {
-    delete static_cast<DQN*>(dqn);
+double __stdcall GetEpsilonDecay(DQN* dqn) {
+    return dqn->GetEpsilonDecay();
 }
 
 }
