@@ -17,8 +17,8 @@ void DestroyDQN(int dqn);
 double GetGamma(int dqn);
 double GetEpsilon(int dqn);
 double GetEpsilonDecay(int dqn);
-void SaveModel(int dqn, string filepath);
-void LoadModel(int dqn, string filepath);
+int SaveModel(int dqn, string filepath);
+int LoadModel(int dqn, string filepath);
 #import
 
 // Example usage
@@ -32,9 +32,11 @@ void OnStart() {
     int dqn = CreateDQN(stateSize, actionSize, hiddenLayers, hiddenLayersSize);
 
     // Load model if exists
-    string modelPath = "path/to/model.bin";
-    if (FileIsExist(modelPath)) {
-        LoadModel(dqn, modelPath);
+    int loadError = LoadModel(dqn, modelPath);
+    if (loadError == 0) {
+        Comment("Model Loaded")
+    } else {
+        Comment("Error: No File To Load")
     }
 
     // Example state
@@ -53,7 +55,12 @@ void OnStart() {
     UpdateTargetNetwork(dqn);
 
     // Save model
-    SaveModel(dqn, modelPath);
+    int saveError = SaveModel(dqn, modelPath);
+    if (saveError == 0) {
+        Comment("Model Saved")
+    } else {
+        Comment("Error: No File To Save")
+    }
 
     // Destroy DQN instance
     DestroyDQN(dqn);
