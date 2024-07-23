@@ -5,6 +5,12 @@ It empowers traders to harness the advanced capabilities of reinforcement learni
 
 By tapping into the power of deep Q-networks, Cortex enables the creation of sophisticated AI-driven decision-making processes that boost trading performance and maximize profits 💹💰.
 
+
+## How To .....
+The program files are compiled to a DLL which can be used in MQL5 by placing in ``MQL5/Libraries` folder. 
+
+Incase you want to edit the library for optimization purposes you are free to tinker just remember to build so that you get your DLL file.
+
 ## Build Command for DLL
 `g++ -shared -o dqn.dll export.cpp DQN.cpp NeuralNetwork.cpp`
 
