@@ -1,4 +1,5 @@
 #include "DQN.h"
+#include "export.h"
 #include <vector>
 
 extern "C" {
