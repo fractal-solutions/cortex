@@ -1,4 +1,10 @@
 # DQN LIBRARY FOR MQL5
+Cortex is a cutting-edge Deep Q-Network (DQN) library that's meticulously crafted for seamless integration with MetaTrader 5 (MQL5) 🚀. 
+
+It empowers traders to harness the advanced capabilities of reinforcement learning, taking their trading strategies to the next level 🚀📈. 
+
+By tapping into the power of deep Q-networks, Cortex enables the creation of sophisticated AI-driven decision-making processes that boost trading performance and maximize profits 💹💰.
+
 ## Build Command for DLL
 `g++ -shared -o dqn.dll export.cpp DQN.cpp NeuralNetwork.cpp`
 
