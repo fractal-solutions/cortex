@@ -7,7 +7,7 @@ By tapping into the power of deep Q-networks, Cortex enables the creation of sop
 
 
 ## How To .....
-The program files are compiled to a DLL which can be used in MQL5 by placing in ``MQL5/Libraries` folder. 
+The program files are compiled to a DLL which can be used in MQL5 by placing in `MQL5/Libraries` folder. 
 
 Incase you want to edit the library for optimization purposes you are free to tinker just remember to build so that you get your DLL file.
 
