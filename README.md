@@ -11,7 +11,7 @@ The program files are compiled to a DLL which can be used in MQL5 by placing in 
 
 Incase you want to edit the library for optimization purposes you are free to tinker just remember to build so that you get your DLL file.
 
-## Build Command for DLL
+### Build Command for DLL
 `g++ -shared -o dqn.dll export.cpp DQN.cpp NeuralNetwork.cpp`
 
 ## Using the DLL in MQL5
