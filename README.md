@@ -9,14 +9,14 @@ In your MQL5 code, you'll need to import the functions from your DLL and call th
 ```
 
 #import "dqn.dll"
-void* CreateDQN(int stateSize, int actionSize, int hiddenLayers[], int hiddenLayersSize);
-int SelectAction(void* dqn, double state[], int stateSize, double epsilon);
-void Train(void* dqn, double state[], int stateSize, int action, double reward, double nextState[], int nextStateSize, double gamma, double epsilonDecay);
-void UpdateTargetNetwork(void* dqn);
-void DestroyDQN(void* dqn);
-double GetGamma(void* dqn);
-double GetEpsilon(void* dqn);
-double GetEpsilonDecay(void* dqn);
+int CreateDQN(int stateSize, int actionSize, int &hiddenLayers[], int hiddenLayersSize);
+int SelectAction(int dqn, double &state[], int stateSize, double epsilon);
+void Train(int dqn, double &state[], int stateSize, int action, double reward, double &nextState[], int nextStateSize, double gamma, double epsilonDecay);
+void UpdateTargetNetwork(int dqn);
+void DestroyDQN(int dqn);
+double GetGamma(int dqn);
+double GetEpsilon(int dqn);
+double GetEpsilonDecay(int dqn);
 #import
 
 // Example usage
@@ -27,21 +27,19 @@ void OnStart() {
     int hiddenLayersSize = ArraySize(hiddenLayers);
 
     // Create DQN instance
-    void* dqn = CreateDQN(stateSize, actionSize, hiddenLayers, hiddenLayersSize);
+    int dqn = CreateDQN(stateSize, actionSize, hiddenLayers, hiddenLayersSize);
 
     // Example state
     double state[] = {0.1, 0.2, 0.3, 0.4};
     double epsilon = 1.0;
 
     // Select an action
-    int action = SelectAction(dqn, state, stateSize, GetEpsilon(dqn));
-
+    int action = SelectAction(dqn, state, ArraySize(state), GetEpsilon(dqn));
+    
     // Example training
     double reward = 1.0;
     double nextState[] = {0.2, 0.3, 0.4, 0.5};
-    double gamma = 0.99;
-    double epsilonDecay = 0.995;
-    Train(dqn, state, stateSize, action, reward, nextState, stateSize, GetGamma(dqn), GetEpsilonDecay(dqn));
+    Train(dqn, state, ArraySize(state), action, reward, nextState, ArraySize(nextState), GetGamma(dqn), GetEpsilonDecay(dqn));
 
     // Update target network
     UpdateTargetNetwork(dqn);
@@ -49,5 +47,6 @@ void OnStart() {
     // Destroy DQN instance
     DestroyDQN(dqn);
 }
+
 
 ```
