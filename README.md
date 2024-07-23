@@ -14,9 +14,9 @@ int SelectAction(void* dqn, double state[], int stateSize, double epsilon);
 void Train(void* dqn, double state[], int stateSize, int action, double reward, double nextState[], int nextStateSize, double gamma, double epsilonDecay);
 void UpdateTargetNetwork(void* dqn);
 void DestroyDQN(void* dqn);
-double GetGamma(DQN* dqn);
-double GetEpsilon(DQN* dqn);
-double GetEpsilonDecay(DQN* dqn);
+double GetGamma(void* dqn);
+double GetEpsilon(void* dqn);
+double GetEpsilonDecay(void* dqn);
 #import
 
 // Example usage
