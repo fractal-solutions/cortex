@@ -49,8 +49,12 @@ void DQN::Train(const std::vector<double>& state, int action, double reward, con
             }
             qNetwork.Backward(std::get<0>(experience), targetQ, learningRate);
         }
+        //THIS DQN IMPLEMENTATION HAS BEEEN FORCED TO USE ADAM, SHOULD OPTIMIZE CODE SUCH THAT THERE IS OPTION OF ADAM OR SGD
+        // Update weights after processing the mini-batch
+        qNetwork.UpdateWeights("Adam");
     }
 }
+
 
 // Update the target network with the Q-network weights
 void DQN::UpdateTargetNetwork() {

@@ -18,10 +18,12 @@ public:
     void UpdateTargetNetwork();
     std::vector<double> GetQValues(const std::vector<double>& state);
 
-    // Public getters for epsilon and gamma
+    // Public getters for epsilon, NN-loss and gamma
     double GetEpsilon() const { return epsilon; }
     double GetGamma() const { return gamma; }
     double GetEpsilonDecay() const { return epsilonDecay; }
+    double GetQNetLoss() const { return qNetwork.GetLoss();}
+    double GetTargetNetLoss() const { return targetNetwork.GetLoss(); }
 
     // Save and load model methods
     int SaveModel(const std::string& filepath);

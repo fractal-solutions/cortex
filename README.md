@@ -10,6 +10,7 @@ By tapping into the power of deep Q-networks, Cortex enables the creation of sop
 The program files are compiled to a DLL which can be used in MQL5 by placing in `MQL5/Libraries` folder. 
 
 Incase you want to edit the library for optimization purposes you are free to tinker just remember to build so that you get your DLL file.
+The NN has several optimization methods but the 'Adam' is used by default. Since it is hard coded, you would have to change that in the DQN.cpp file then recompile the DLL for use.
 
 ### Build Command for DLL
 `g++ -shared -o dqn.dll export.cpp DQN.cpp NeuralNetwork.cpp`
@@ -45,6 +46,8 @@ void DestroyDQN(int dqn);
 double GetGamma(int dqn);
 double GetEpsilon(int dqn);
 double GetEpsilonDecay(int dqn);
+double GetQNetLoss(int dqn);
+double GetTargetNetLoss(int dqn);
 int SaveModel(int dqn, string filepath);
 int LoadModel(int dqn, string filepath);
 #import

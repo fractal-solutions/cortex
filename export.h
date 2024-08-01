@@ -23,6 +23,8 @@ DLL_EXPORT void DLL_CALL UpdateTargetNetwork(DQN* dqn);
 DLL_EXPORT double DLL_CALL GetGamma(DQN* dqn);
 DLL_EXPORT double DLL_CALL GetEpsilon(DQN* dqn);
 DLL_EXPORT double DLL_CALL GetEpsilonDecay(DQN* dqn);
+DLL_EXPORT double DLL_CALL GetQNetLoss(DQN* dqn);
+DLL_EXPORT double DLL_CALL GetTargetNetLoss(DQN* dqn);
 DLL_EXPORT int DLL_CALL SaveModel(DQN* dqn, const char* filepath);
 DLL_EXPORT int DLL_CALL LoadModel(DQN* dqn, const char* filepath);
 

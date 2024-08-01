@@ -40,6 +40,14 @@ double DLL_CALL GetEpsilonDecay(DQN* dqn) {
     return dqn->GetEpsilonDecay();
 }
 
+double DLL_CALL GetQNetLoss(DQN* dqn){
+    return dqn->GetQNetLoss();
+}
+
+double DLL_CALL GetTargetNetLoss(DQN* dqn){
+    return dqn->GetTargetNetLoss();
+}
+
 int DLL_CALL SaveModel(DQN* dqn, const char* filepath) {
     dqn->SaveModel(filepath);
 }

@@ -12,7 +12,9 @@ public:
 
     std::vector<double> Forward(const std::vector<double>& inputs);
     void Backward(const std::vector<double>& inputs, const std::vector<double>& targets, double learningRate);
-    void UpdateWeights(); // This method will be used in case of optimization or weight update.
+    void UpdateWeights(const std::string& optimizer); // This method will be used in case of optimization or weight update.
+    double CalculateLoss(const std::vector<double>& targets, const std::vector<double>& outputs);
+    double GetLoss() const;
     
     
     //priiiivaaaaatee
@@ -24,9 +26,23 @@ public:
     std::function<double(double)> activation;
     std::function<double(double)> activationDerivative;
     double learningRate = 0.001; // Default learning rate
+    double loss;
 
 
 private:
+    // Adam optimizer parameters
+    std::vector<std::vector<std::vector<double>>> m_weights;
+    std::vector<std::vector<std::vector<double>>> v_weights;
+    std::vector<std::vector<double>> m_biases;
+    std::vector<std::vector<double>> v_biases;
+    double beta1 = 0.9;
+    double beta2 = 0.999;
+    double epsilon = 1e-8;
+    int t = 0;
+
+    void InitializeAdam(); // Initialize Adam parameters
+    void UpdateWeightsSGD();
+    void UpdateWeightsAdam();
     
 };
 
