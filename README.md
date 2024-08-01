@@ -33,6 +33,7 @@ In your MQL5 code, you'll need to import the functions from your DLL and call th
 
 
 ### Example MQL5 Code:
+Please note that some methods in the code are simply placeholders and you would need to implement your own logic depending on the library you use (CTrade, etc.)
 
 ```
 
